@@ -1,0 +1,20 @@
+http:
+  port: "8081"
+  
+email:
+  host: "![Rz0/Ogshav9tl/vWwiRilg==]"
+  port: "![LyhO32q3iM7eISlWgDE4qw==]"
+  user: "![oqsE/jWJwyoG0XgDrLTeTaryNAQqEa65/2BweOyncio=]"
+  password: "![vFLYIiCMvcjwpYiS5R0fvQ==]"
+  
+db:
+  host: "localhost"
+  port: "3306"
+  user: "![2pU46G1llKygdpYS73W6TA==]"
+  password: "![frjvfIwdShlqPNkmXQZ6kg==]"
+  database: "![1DMX2JZqpW6yX65AuVkkkQ==]"
+  
+salesforce:
+  user: "![9birLI5E4QavreXweibzrwse/OCjvWuwhdQBbdySZpQ=]"
+  password: "![TkJrNeCF9CJ7KbjiC7UvQQ==]"
+  token: "![xa2+80+hRrGD+VKOmiay7I2Xuc4Y0u+JyeQm/G5A7ow=]"

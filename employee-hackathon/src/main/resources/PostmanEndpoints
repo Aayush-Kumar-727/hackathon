@@ -1,0 +1,16 @@
+To get all Employees :- 
+	select Get operation and enter "http://localhost:8081/api/employees" as url
+
+To post an Employee :-
+	select Post operation and enter "http://localhost:8081/api/employees" as url
+	Add body accordingly
+	
+To get Employee by ID :-
+	select Get operation and enter "http://localhost:8081/api/employees/ID" as url
+	
+To update an Employee :-
+	select Put operation and enter "http://localhost:8081/api/employees/ID" as url
+	Add body accordingly
+	
+To delete an Employee :-
+	select Delete operation and enter "http://localhost:8081/api/employees/ID" as url
