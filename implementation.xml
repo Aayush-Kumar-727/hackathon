@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="73bc7fb0-555d-4cdb-afde-0a9a17d12fc3" >
+		<file:connection workingDir="C:\Users\Aayush Kumar\Desktop" />
+	</file:config>
+	<flow name="getEmployees" doc:id="9b791852-0869-4e87-ae23-e1ac33b93c67" >
+		<db:select doc:name="Select" doc:id="1234b778-546a-4d3f-8163-ac65c3fa38ee" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from Employee]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="7de6fc0b-7e84-4211-b98f-79b0cd747fe7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="18ddf23d-8a5f-416d-8177-0e6f10899b5a" message="#[payload]"/>
+	</flow>
+	<flow name="postEmployees" doc:id="c94724ce-9f88-4291-82ef-a0da9c087723" >
+		<db:insert doc:name="Insert" doc:id="8380ffbe-2d3d-48cd-95d2-91ad0c411b4f" config-ref="Database_Config">
+			<db:sql ><![CDATA[insert into Employee(Name,Email,Age,City,Project,Manager) values(:name,:email,:age,:city,:project,:manager)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{name: payload.Name, 
+email: payload.Email, 
+age: payload.Age, 
+city: payload.City,
+project: payload.Project,
+manager: payload.Manager}]]]></db:input-parameters>
+		</db:insert>
+		<logger level="INFO" doc:name="Logger" doc:id="1e0a8591-1c98-443c-b0c7-7850792f68e6" message="#[payload]"/>
+	</flow>
+	<flow name="deleteEmployeeByID" doc:id="6d726fbe-a70c-423c-a657-7c45fb941975" >
+		<db:delete doc:name="Delete" doc:id="8c69834a-971d-412a-8eb3-9a4d736e923b" config-ref="Database_Config">
+			<db:sql ><![CDATA[delete from Employee where ID = :id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{id: attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:delete>
+		<logger level="INFO" doc:name="Logger" doc:id="6ad72f82-9343-4a64-8cb8-0e84f2061702" message="#[payload]"/>
+	</flow>
+	<flow name="putEmployeeByID" doc:id="c5ddf1d6-f7e8-4c12-917f-d6920c8283e6" >
+		<db:update doc:name="Update" doc:id="1eaa0945-8690-47a3-84ad-37fa66fe0c6b" config-ref="Database_Config">
+			<db:sql ><![CDATA[update Employee set City = :city where ID = :id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{city: payload.City,
+id: attributes.uriParams.ID }]]]></db:input-parameters>
+		</db:update>
+		<logger level="INFO" doc:name="Logger" doc:id="5032e8fc-63bb-42df-b8cc-1af8e24bf12a" message="#[payload]"/>
+	</flow>
+	<flow name="getEmployeeByID" doc:id="c980fea4-f358-4160-8a69-007bc73ae213" >
+		<db:select doc:name="Select" doc:id="dbad8c37-d191-4d74-a6b7-adee4a4d84ab" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from Employee where ID = :id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{id: attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="500689bb-478c-42c8-be44-8df76774f045" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a84c1597-31a8-4f39-b8cf-775926878600" message="#[payload]"/>
+	</flow>
+	<flow name="implementationFlow" doc:id="88e22904-0912-4570-8bf0-94606b7e6a4d" >
+		<scheduler doc:name="Scheduler" doc:id="a8203845-5cb9-4e73-a3ea-b0b51403ee5e" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="DAYS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<db:select doc:name="Select" doc:id="8b231260-2ab0-4fb2-9706-db33599f849e" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from Employee]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="879c9727-fb34-4449-bd8d-e46d4986c815" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:name="Write" doc:id="b66233e3-ae81-4ad7-98ab-2e19bb293914" config-ref="File_Config" path="employee.csv"/>
+		<logger level="INFO" doc:name="Logger" doc:id="bb14ffe2-e7f2-455e-bbf1-638834cf8c2b" message="#[payload]"/>
+	</flow>
+</mule>

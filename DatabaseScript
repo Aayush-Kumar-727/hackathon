@@ -1,0 +1,15 @@
+The script to create database and table is:-
+
+create database hackathon;
+use hackathon;
+
+create table Employee(
+	ID int primary key auto_increment,
+    Name varchar(30) not null,
+    Email varchar(50) not null,
+    Age int not null,
+    City varchar(30) not null,
+    Project varchar(30) not null,
+    Manager varchar(30) not null
+);
+
