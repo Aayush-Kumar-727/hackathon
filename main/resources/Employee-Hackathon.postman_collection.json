@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "8bc9f18e-1408-418f-9dc2-84cf6beb7828",
+		"name": "Employee-Hackathon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8081/api/employees/2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/employees/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"employees",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/api/employees/1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "clientID",
+						"value": "dfdfd",
+						"type": "text"
+					},
+					{
+						"key": "clientSecret",
+						"value": "dsfddg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Name\": \"Aayush Kumar\",\r\n  \"Email\": \"aayush.kumar@apisero.com\",\r\n  \"Age\": 22,\r\n  \"City\": \"Hyderabad\",\r\n  \"Project\": \"Greenhouse\",\r\n  \"Manager\": \"Santosh\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/employees/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"employees",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/api/employees",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "clientID",
+						"value": "hjdhd",
+						"type": "text"
+					},
+					{
+						"key": "clientSecret",
+						"value": "xjcjscc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Name\": \"Vishal Kumarr\",\r\n  \"Email\": \"vishal.kumar@apisero.com\",\r\n  \"Age\": 24,\r\n  \"City\": \"Noida\",\r\n  \"Project\": \"Greenhouse\",\r\n  \"Manager\": \"Santosh\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/api/employees/1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "clientID",
+						"value": "ffg",
+						"type": "text"
+					},
+					{
+						"key": "clientSecret",
+						"value": "dgfhfhfh",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/api/employees/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"employees",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

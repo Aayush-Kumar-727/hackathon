@@ -1,0 +1,75 @@
+#%RAML 1.0
+title: Employees API
+
+types:
+  Employee: !include /datatype/EmployeeObject.raml
+traits:
+  client-id-required:
+    headers:
+      clientID:
+        type: string
+        required: true
+      clientSecret:
+        type: string
+        required: true
+
+/employees:
+  is: client-id-required
+  get:
+    description: To get all the employee details
+    responses:
+      200:
+        description: Success, Data fetched from the database successfully
+        body:
+          application/json:
+            type: Employee[]
+            examples: !include /examples/EmployeeExamples.raml
+      400:
+        description: Error while fetching the data from database
+        body:
+          application/json:
+            example:
+              message: Error while fetching the data
+  post:
+    body:
+      application/json:
+        type: Employee
+        example: !include /examples/EmployeeNoIDExample.raml
+    responses:
+      201:
+        description: Successfully created
+        body:
+          application/json:
+            example:
+              message: Data added(But not really)
+  /{ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Employee
+              examples: !include /examples/EmployeeNoIDExample.raml
+        400:
+          body:
+            application/json:
+              example:
+                message: Error while fetching tha data
+    put:
+      body:
+        application/json:
+          type: Employee
+          example: !include /examples/EmployeeNoIDExample.raml
+      responses:
+        201:
+          body:
+            application/json:
+              example:
+                message: Data updated(But not really)
+    delete:  
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                message: Data deleted(but not really)

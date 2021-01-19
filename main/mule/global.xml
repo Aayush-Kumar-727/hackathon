@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="5eeb1009-dbe2-4d5b-9984-5d906cc16df2" file="config.yaml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2197e21c-5bc6-4471-ba02-e1dd2e6019fa" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="03865fa8-fd94-4c76-866e-b71edeeaa03d" >
+		<email:smtp-connection host="${secure::email.host}" port="${secure::email.port}" user="${secure::email.user}" password="${secure::email.password}" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<configuration doc:name="Configuration" doc:id="60aaba7c-feb5-4130-8cd1-fd31a43f03af" defaultErrorHandler-ref="globalError_Handler" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="0eb9fab0-dd14-401a-ad64-5b2f2a3368da">
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${secure::db.user}" password="${secure::db.password}" database="${secure::db.database}" />
+	</db:config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="2e528041-5987-4cdc-ae46-6c42ada88e99" >
+		<salesforce:basic-connection username="${secure::salesforce.user}" password="${secure::salesforce.password}" securityToken="${secure::salesforce.token}" />
+	</salesforce:sfdc-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="4edbba06-cd73-4d2a-ae77-213614401052" file="config.yaml" key="AayushKumar72730" />
+	<error-handler name="globalError_Handler" doc:id="b506ac13-d374-4caf-ab25-e7364f6d4c77" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="76936edb-bc40-4123-8cf9-be68903047fd" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="f7be7969-23e2-45a9-9b2e-5ad93f0d8405" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+Error:{
+    Body: "Hi Aayush, following error has occured in you flow:",
+    Error_type: error.errorType,
+    Error_description: error.description,
+    Error_message: error.errorMessage
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<email:send doc:name="Send" doc:id="0457ce32-f4b8-4c04-aa92-5732fda4299e" config-ref="Email_SMTP" fromAddress="aayush.kumar@apisero.com" subject="Error in mule flow">
+				<email:to-addresses >
+					<email:to-address value="aayush.kumar@apisero.com" />
+				</email:to-addresses>
+				<email:body contentType="text/plain" encoding="UTF-8">
+					<email:content ><![CDATA[#[payload.Error]]]></email:content>
+				</email:body>
+			</email:send>
+		</on-error-propagate>
+	</error-handler>
+</mule>
